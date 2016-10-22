@@ -136,7 +136,7 @@ function _zpm::help()
   echo ""
 }
 
-function zpm()
+function _zpm::main()
 {
   #
   # Verifies requirements
@@ -181,3 +181,5 @@ function zpm()
 
   return 0
 }
+
+_zpm::main $*

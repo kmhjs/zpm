@@ -7,6 +7,12 @@ A simple zsh package manager.
 A simple zsh package manager implementation. This project is an example project
 of [kmhjs/zcl](https://github.com/kmhjs/zcl) .
 
+# Usage
+
+1. Clone this project. (Or download `zpm` file)
+2. Update your `FPATH` with path to zpm file.
+3. Call `autoload -Uz zpm` in `.zshrc` etc.
+
 ## Configuration file path
 
 Normal configuration file path is `${HOME}/.config/zpm/plugin.conf` .  
