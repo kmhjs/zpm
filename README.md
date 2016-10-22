@@ -10,8 +10,10 @@ of [kmhjs/zcl](https://github.com/kmhjs/zcl) .
 # Usage
 
 1. Clone this project. (Or download `zpm` file)
-2. Update your `FPATH` with path to zpm file.
-3. Call `autoload -Uz zpm` in `.zshrc` etc.
+2. Clone [kmhjs/zcl](https://github.com/kmhjs/zcl) project. (Or download `zcl` file)
+3. Update your `FPATH` with path to `zpm` and `zcl` file.
+4. Call `autoload -Uz zcl` and `autoload -Uz zpm` in `.zshrc` etc.
+5. Configure your `plugin.conf` .
 
 ## Configuration file path
 
