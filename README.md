@@ -7,6 +7,11 @@ A simple zsh package manager.
 A simple zsh package manager implementation. This project is an example project
 of [kmhjs/zcl](https://github.com/kmhjs/zcl) .
 
+## Configuration file path
+
+Normal configuration file path is `${HOME}/.config/zpm/plugin.conf` .  
+If you want to change the path, define path as variable `ZPM_CONFIGURATION_PATH` .
+
 ## Configuration format
 
 ```

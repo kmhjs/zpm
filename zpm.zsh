@@ -1,6 +1,11 @@
 function _zpm::configuration_path()
 {
-  echo -n './plugins.conf'
+  if [[ -n ${ZPM_CONFIGURATION_PATH} ]]
+  then
+    echo -n ${ZPM_CONFIGURATION_PATH}
+  else
+    echo ${HOME}/.config/zpm/plugin.conf
+  fi
 
   return $?
 }
@@ -37,10 +42,7 @@ function _zpm::install_plugin()
   # Color definition is for remove dependency of colors native module.
   local -A term_colors=(red '\e[1;31m' magenta '\e[1;35m' cyan '\e[1;36m' reset '\e[0;0m')
 
-  if [[ ! -d ${config[install_base_path]} ]]
-  then
-    mkdir -p ${config[install_base_path]}
-  fi
+  mkdir -p ${config[install_base_path]}
 
   if [[ -d ${install_path} ]]
   then
@@ -175,5 +177,7 @@ function zpm()
       _zpm::help
       ;;
 
-    esac
+  esac
+
+  return 0
 }
