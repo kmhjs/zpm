@@ -32,6 +32,7 @@ function _zpm::show_error_message()
 function _zpm::install_plugin()
 {
   local -A config=(repository_name ${1} repository_url ${2} install_base_path ${3})
+  local install_path=${config[install_base_path]}/${config[repository_name]}
 
   # Color definition is for remove dependency of colors native module.
   local -A term_colors=(red '\e[1;31m' magenta '\e[1;35m' cyan '\e[1;36m' reset '\e[0;0m')
@@ -41,15 +42,15 @@ function _zpm::install_plugin()
     mkdir -p ${config[install_base_path]}
   fi
 
-  if [[ -d ${config[install_base_path]}/${config[repository_name]} ]]
+  if [[ -d ${install_path} ]]
   then
     echo "-> ${term_colors[magenta]}Skip (Installed)${term_colors[reset]} : ${config[repository_name]} (${config[repository_url]})"
 
   else
-    echo "-> ${term_colors[cyan]}Installing${term_colors[reset]} : ${config[repository_name]} (${config[repository_url]}) -> ${config[install_base_path]}/${config[repository_name]}"
+    echo "-> ${term_colors[cyan]}Installing${term_colors[reset]} : ${config[repository_name]} (${config[repository_url]}) -> ${install_path}"
 
     echo -n ${term_colors[magenta]}
-    git clone ${config[repository_url]} ${config[install_base_path]}/${config[repository_name]}
+    git clone ${config[repository_url]} ${install_path}
     echo ${term_colors[reset]}
   fi
 }
@@ -59,9 +60,12 @@ function _zpm::update_plugin()
   local -A config=(repository_name ${1} repository_url ${2} install_base_path ${3})
   local install_path=${config[install_base_path]}/${config[repository_name]}
 
+  # Color definition is for remove dependency of colors native module.
+  local -A term_colors=(red '\e[1;31m' magenta '\e[1;35m' cyan '\e[1;36m' reset '\e[0;0m')
+
   if [[ -d ${install_path} ]]
   then
-    echo "Updating: ${config[repository_name]}"
+    echo "${term_colors[cyan]}Updating${term_colors[reset]} : ${config[repository_name]}"
 
     pushd ${install_path} 1>/dev/null
 
@@ -91,7 +95,7 @@ function _zpm::show_plugin()
 
   echo "${install_status_message} ${config[repository_name]}"
   echo "    URL: ${config[repository_url]}"
-  echo "    Base path : ${config[install_base_path]}/${config[repository_name]}"
+  echo "    Base path : ${install_path}"
   echo ""
 }
 
