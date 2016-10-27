@@ -7,7 +7,7 @@ A simple zsh package manager.
 A simple zsh package manager implementation. This project is an example project
 of [kmhjs/zcl](https://github.com/kmhjs/zcl) .
 
-# Usage
+## Usage
 
 1. Clone this project. (Or download `zpm` file)
 2. Clone [kmhjs/zcl](https://github.com/kmhjs/zcl) project. (Or download `zcl` file)
@@ -15,12 +15,22 @@ of [kmhjs/zcl](https://github.com/kmhjs/zcl) .
 4. Call `autoload -Uz zcl` and `autoload -Uz zpm` in `.zshrc` etc.
 5. Configure your `plugin.conf` .
 
-## Configuration file path
+### Dry-run mode
+
+If you want to use dry-run mode, pass `zpm_dry_run=1` to zpm as environment variable.
+
+```shell
+zpm_dry_run=1 zpm --update
+```
+
+## Configuration
+
+### Configuration file path
 
 Normal configuration file path is `${HOME}/.config/zpm/plugin.conf` .  
 If you want to change the path, define path as variable `ZPM_CONFIGURATION_PATH` .
 
-## Configuration format
+### Configuration format
 
 ```
 (

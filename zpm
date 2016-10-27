@@ -24,6 +24,21 @@ function _zpm::is_zcl_available()
   return $?
 }
 
+function _zpm::is_dry_run()
+{
+  [[ "${zpm_dry_run}" == '1' ]]
+
+  return $?
+}
+
+function _zpm::dry_run_task()
+{
+  if _zpm::is_dry_run
+  then
+    echo -n 'echo'
+  fi
+}
+
 function _zpm::show_error_message()
 {
   # Color definition is for remove dependency of colors native module.
@@ -39,6 +54,9 @@ function _zpm::install_plugin()
   local -A config=(repository_name ${1} repository_url ${2} install_base_path ${3})
   local install_path=${config[install_base_path]}/${config[repository_name]}
 
+  # Prepare dry-run mode configuration
+  local dry_run_task=$(_zpm::dry_run_task)
+
   # Color definition is for remove dependency of colors native module.
   local -A term_colors=(red '\e[1;31m' magenta '\e[1;35m' cyan '\e[1;36m' reset '\e[0;0m')
 
@@ -52,7 +70,7 @@ function _zpm::install_plugin()
     echo "-> ${term_colors[cyan]}Installing${term_colors[reset]} : ${config[repository_name]} (${config[repository_url]}) -> ${install_path}"
 
     echo -n ${term_colors[magenta]}
-    git clone ${config[repository_url]} ${install_path}
+    ${dry_run_task} git clone ${config[repository_url]} ${install_path}
     echo ${term_colors[reset]}
   fi
 }
@@ -62,6 +80,9 @@ function _zpm::update_plugin()
   local -A config=(repository_name ${1} repository_url ${2} install_base_path ${3})
   local install_path=${config[install_base_path]}/${config[repository_name]}
 
+  # Prepare dry-run mode configuration
+  local dry_run_task=$(_zpm::dry_run_task)
+
   # Color definition is for remove dependency of colors native module.
   local -A term_colors=(red '\e[1;31m' magenta '\e[1;35m' cyan '\e[1;36m' reset '\e[0;0m')
 
@@ -69,13 +90,13 @@ function _zpm::update_plugin()
   then
     echo "${term_colors[cyan]}Updating${term_colors[reset]} : ${config[repository_name]}"
 
-    pushd ${install_path} 1>/dev/null
+    ${dry_run_task} pushd ${install_path} 1>/dev/null
 
     echo -n ${term_colors[magenta]}
-    git pull --ff-only
+    ${dry_run_task} git pull --ff-only
     echo ${term_colors[reset]}
 
-    popd 1>/dev/null
+    ${dry_run_task} popd 1>/dev/null
   fi
 }
 
@@ -138,6 +159,15 @@ function _zpm::help()
 
 function _zpm::main()
 {
+  # Color definition is for remove dependency of colors native module.
+  local -A term_colors=(magenta '\e[1;35m' reset '\e[0;0m')
+
+  # Dry-run information
+  if _zpm::is_dry_run
+  then
+    echo "\n${term_colors[magenta]}Info / zpm is running under dry-run mode.${term_colors[reset]}\n" 1>&2
+  fi
+
   #
   # Verifies requirements
   #
