@@ -6,29 +6,21 @@ function _zpm::configuration_path()
   else
     echo ${HOME}/.config/zpm/plugin.conf
   fi
-
-  return $?
 }
 
 function _zpm::is_configuration_available()
 {
   [[ -f $(_zpm::configuration_path) ]]
-
-  return $?
 }
 
 function _zpm::is_zcl_available()
 {
   which zcl 1>/dev/null 2>/dev/null
-
-  return $?
 }
 
 function _zpm::is_dry_run()
 {
   [[ "${zpm_dry_run}" == '1' ]]
-
-  return $?
 }
 
 function _zpm::dry_run_task()
@@ -208,8 +200,6 @@ function _zpm::main()
       ;;
 
   esac
-
-  return 0
 }
 
 _zpm::main $*
