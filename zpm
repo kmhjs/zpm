@@ -1,3 +1,12 @@
+#
+# Outputs configuration path.
+#
+# If user defined own configuration file path as ${ZPM_CONFIGURATION_PATH}, then
+# output it. Otherwise, output the default path.
+#
+# Note: This function does not guarantee the existence or validity of path which
+#       will be output.
+#
 function _zpm::configuration_path()
 {
   if [[ -n ${ZPM_CONFIGURATION_PATH} ]]
@@ -8,21 +17,40 @@ function _zpm::configuration_path()
   fi
 }
 
+#
+# Validates configuration path.
+#
+# This function guarantees the configuration file is exist at the specified path.
+#
 function _zpm::is_configuration_available()
 {
   [[ -f $(_zpm::configuration_path) ]]
 }
 
+#
+# Validates zcl (dependency of this command) is existence
+#
+# This function guarantees the zcl command can be found in directory included in
+# ${PATH} .
+#
 function _zpm::is_zcl_available()
 {
   which zcl 1>/dev/null 2>/dev/null
 }
 
+#
+# Returns the task is running under the dry-run mode or not.
+#
 function _zpm::is_dry_run()
 {
   [[ "${zpm_dry_run}" == '1' ]]
 }
 
+#
+# Outputs heading command for dry-run mode.
+#
+# This function outputs `echo` for dry-run mode task.
+#
 function _zpm::dry_run_task()
 {
   if _zpm::is_dry_run
@@ -31,6 +59,11 @@ function _zpm::dry_run_task()
   fi
 }
 
+#
+# Outputs error message.
+#
+# @param Error message
+#
 function _zpm::show_error_message()
 {
   # Color definition is for remove dependency of colors native module.
@@ -41,6 +74,15 @@ function _zpm::show_error_message()
   echo "${term_colors[red]}Error${term_colors[reset]} : ${message}" 1>&2
 }
 
+#
+# Install plugin through git (clone) command.
+#
+# It is expected that the zcl command calls this function directly.
+#
+# @param Repository name : This will be used as installation directory name under ${install_base_path}
+# @param Repository url : The plugin will be fetched from this URL.
+# @param Install base path : This will be used as plugin installation directory. (Not for specific plugin)
+#
 function _zpm::install_plugin()
 {
   local -A config=(repository_name ${1} repository_url ${2} install_base_path ${3})
@@ -67,6 +109,15 @@ function _zpm::install_plugin()
   fi
 }
 
+#
+# Update the plugin through git (pull) command.
+#
+# It is expected that the zcl command calls this function directly.
+#
+# @param Repository name : This will be used as installation directory name under ${install_base_path}
+# @param Repository url : The plugin will be fetched from this URL.
+# @param Install base path : This will be used as plugin installation directory. (Not for specific plugin)
+#
 function _zpm::update_plugin()
 {
   local -A config=(repository_name ${1} repository_url ${2} install_base_path ${3})
@@ -92,6 +143,15 @@ function _zpm::update_plugin()
   fi
 }
 
+#
+# Show the installation status of plugins defined in configuration file.
+#
+# It is expected that the zcl command calls this function directly.
+#
+# @param Repository name : This will be used as installation directory name under ${install_base_path}
+# @param Repository url : The plugin will be fetched from this URL.
+# @param Install base path : This will be used as plugin installation directory. (Not for specific plugin)
+#
 function _zpm::show_plugin()
 {
   # Color definition is for remove dependency of colors native module.
@@ -114,6 +174,9 @@ function _zpm::show_plugin()
   echo ""
 }
 
+#
+# Outputs the help.
+#
 function _zpm::help()
 {
   # Color definition is for remove dependency of colors native module.
@@ -149,6 +212,9 @@ function _zpm::help()
   echo ""
 }
 
+#
+# The main task of zpm. See help for more details.
+#
 function _zpm::main()
 {
   # Color definition is for remove dependency of colors native module.
